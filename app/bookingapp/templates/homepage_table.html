@@ -1,0 +1,10 @@
+<tr class="clickable-row" onclick="openFlightDetails('{{flight.flightId}}', this)">
+    <td>{{ flight.routeId.origin }}</td>
+    <td>{{ flight.routeId.destination }}</td>
+    <td>{{ flight.depDate }}</td>
+    <td>{{ flight.depTime }}</td>
+    <td>{{ flight.arrDate }}</td>
+    <td>{{ flight.arrTime }}</td>
+    <!-- flight number is just the planes code concatenated with the flight record PK-->
+    <td>#{{flight.routeId.planeId.code}}_{{ flight.flightId}} </td>
+</tr>

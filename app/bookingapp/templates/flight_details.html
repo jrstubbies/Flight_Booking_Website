@@ -1,0 +1,94 @@
+<!doctype html>
+{% load static %}
+
+<!-- DISPLAY SOME FLIGHT DETAILS AND ALLOW USER TO BOOK -->
+<html>
+    <head>
+        <title>Flight Details</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'navbar.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'tables.css' %}">
+    </head>
+
+    <body>
+        {% include 'navbar.html' %}
+        <h1>Here are the details for this flight</h1>
+
+        <table>
+            <tr>
+                <td>Origin:</td>
+                <td>{{ flight.routeId.origin }}</td>
+            </tr>
+            <tr>
+                <td>Destination:</td>
+                <td>{{ flight.routeId.destination }}</td>
+            </tr>
+            <tr>
+                <td>Departure Date:</td>
+                <td>{{ flight.depDate }}</td>
+            </tr>
+            <tr>
+                <td>Departure Time:</td>
+                <td>{{ flight.depTime }}</td>
+            </tr>
+            <tr>
+                <td>Arrival Date:</td>
+                <td>{{ flight.arrDate }}</td>
+            </tr>
+            <tr>
+                <td>Arrival Time:</td>
+                <td>{{ flight.arrTime }}</td>
+            </tr>
+            <tr>
+                <td>Ticket Cost:</td>
+                <td>${{ flight.ticketCost }}</td>
+            </tr>
+            <tr>
+                <td>Route Name:</td>
+                <td>{{ flight.routeId.routeName }}</td>
+            </tr>
+            <tr>
+                <td>Plane:</td>
+                <td>{{ flight.routeId.planeId.name }}</td>
+            </tr>
+            <tr>
+                <td>Seats remaining on flight:</td>
+                <td>{{ availseats }}</td>
+            </tr>
+        </table>
+
+
+        <!-- If the user is not logged in dont show the booking button, on click create booking record -->
+        {% if request.session.is_logged_in == None %}
+            <p>You need to be logged in to book a flight</p>
+        {% else %}
+            <form id="bookFlight" method="post" action="{% url 'confirmation' %}">
+                {% csrf_token %}
+                <input type="hidden" name="flight_id" value="{{flight.flightId}}">
+                <input type="submit" name="book" value="Book Flight" id="bookButton">
+            </form>
+        {% endif %}
+
+        <!-- script to make the booking button available only if seats are available -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var availSeats = {{ availseats }};
+                var bookbtn = document.getElementById("bookButton");
+
+                if (availSeats <= 0 || request.session.is_logged_in == None) {
+                    bookbtn.disable = true;
+                    bookbtn.style.display = "none";
+                } else {
+                    bookbtn.disabled = false;
+                    bookbtn.style.display = "block";
+                }
+            });
+        </script>
+
+
+        <footer>
+            <br>
+            <hr>
+            <p>Myles Stubbs</p>
+        </footer>
+    </body>
+</html>

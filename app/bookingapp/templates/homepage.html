@@ -1,0 +1,145 @@
+<!doctype html>
+{% load static %}
+<html>
+    <head>
+        <title>Welcome</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'homepage.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'navbar.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'tables.css' %}">
+
+        <!-- jQuery include -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        {% include 'navbar.html' %}
+        <h1>Browse Our Amazing Flights Below</h1>
+
+        <!-- Filter functionality -->
+        <div id="filter">
+            <h2>Filter flights</h2>
+            <label>Origin:  </label>
+            <select id="origin_dropdown">
+                <option value="">All</option>
+                <option value="Dairy Flat (NZNE)">Dairy Flat</option>
+                <option value="Sydney (YSSY)">Sydney</option>
+                <option value="Rotorua (NZRO)">Rotorua</option>
+                <option value="Great Barrier Island (NZGB)">Great Barrier Island</option>
+                <option value="Chatham Island (NZCI)">Chatham Island</option>
+                <option value="Lake Tekapo (NZTL)">Lake Tekapo</option>
+            </select>
+
+            <label>Destination:  </label>
+            <select id="dest_dropdown">
+                <option value="">All</option>
+                <option value="Dairy Flat (NZNE)">Dairy Flat</option>
+                <option value="Sydney (YSSY)">Sydney</option>
+                <option value="Rotorua (NZRO)">Rotorua</option>
+                <option value="Great Barrier Island (NZGB)">Great Barrier Island</option>
+                <option value="Chatham Island (NZCI)">Chatham Island</option>
+                <option value="Lake Tekapo (NZTL)">Lake Tekapo</option>
+            </select>
+
+            <label>Start Date:  </label>
+            <input type="date" id="start_date">
+
+            <label>End Date:  </label>
+            <input type="date" id="end_date">
+
+            <button type="submit" id="filterButton">Apply Filter</button>
+        </div>
+
+        <br><hr>
+        <p>Here is our upcoming flights</p>
+        <p> Click on a flight to see more details and book your seat. All arrival and departure times are
+            in the regions local timezone </p>
+        <hr>
+
+        <table id="flight-table">
+            <thead>
+                <tr>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Depart Date</th>
+                    <th>Depart Time</th>
+                    <th>Arrive Date</th>
+                    <th>Arrive Time</th>
+                    <th>Flight Number</th>
+                </tr>
+            </thead>
+
+            <!-- on initial load use another html page to display the flights -->
+            <tbody>
+                {% for flight in flights %}
+                    {% include 'homepage_table.html' with flight=flight %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- JavaScript functions -->
+        <!-- function to apply the filter and update the table with relevant records using AJAX -->
+        <!-- function to make each row clickable to open a detailed flight view -->
+        <script>
+            $(document).ready(function() {
+                $('#filterButton').click(function () {
+                    filterFlights()
+                });
+
+                function filterFlights() {
+                    var origin = $('#origin_dropdown').val();
+                    var destination = $('#dest_dropdown').val();
+                    var startDate = $('#start_date').val();
+                    var endDate = $('#end_date').val();
+
+                    $.ajax({
+                        url: '{% url "filter_flights" %}',
+                        type: 'GET',
+                        data: {
+                            origin: origin,
+                            destination: destination,
+                            start_date: startDate,
+                            end_date: endDate
+                        },
+                        success: function (data) {
+                            updateFlightTable(data);
+                        },
+                        error: function () {
+                            alert('Error fetching filtered flights.');
+                        }
+                    });
+                }
+
+
+                function updateFlightTable(flights) {
+                    var tableBody = $('#flight-table tbody');
+                    tableBody.empty();
+
+                    $.each(flights, function (index, flight) {
+                        var row = '<tr class="clickable-row" onclick="openFlightDetails(' + flight.flightId +', this)">' +
+                            '<td>' + flight.origin + '</td>' +
+                            '<td>' + flight.destination + '</td>' +
+                            '<td>' + flight.depDate + '</td>' +
+                            '<td>' + flight.depTime + '</td>' +
+                            '<td>' + flight.arrDate + '</td>' +
+                            '<td>' + flight.arrTime + '</td>' +
+                            '<td>' + '#' + flight.route.planeId.code + '_' + flight.flightId + '</td>' +
+                            '</tr>';
+                        tableBody.append(row);
+                    });
+                }
+            });
+
+
+            function openFlightDetails(flightId, element) {
+                window.open(`flightdetails/${flightId}`, '_blank');
+                element.classList.add('selected-row');
+            }
+        </script>
+
+        <footer>
+            <br>
+            <hr>
+            <p>Myles Stubbs</p>
+        </footer>
+    </body>
+</html>

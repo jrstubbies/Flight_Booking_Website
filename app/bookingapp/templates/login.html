@@ -1,0 +1,52 @@
+<!doctype html>
+{% load static %}
+
+<!-- BASIC LOGIN PAGE -->
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'navbar.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'tables.css' %}">
+    </head>
+
+    <body>
+        {% include 'navbar.html' %}
+        <p>Enter your login details</p>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>Username: </td>
+                    <td><input type="text" name="username" required></td>
+                </tr>
+                <tr>
+                    <td>Password: </td>
+                    <td><input type="password" name="password" required></td>
+                </tr>
+            </table>
+
+            <!-- If an error occurs during login, then display an error message -->
+            {% if error_message %}
+                <p>{{ error_message }}</p>
+            {% endif %}
+
+            <div id="buttons">
+                <p><input type="submit" id="loginButton" name="submit" value="Login"></p>
+                <p> or if not already registered</p>
+                <p><a href="{% url 'signup' %}">Sign Up Here</a></p>
+            </div>
+        </form>
+
+        <br>
+        <p>Current usernames and password to help with testing:</p>
+        {% for user in users %}
+            <p>Username: {{user.username}} &nbsp; &nbsp;  Password:  {{user.password}}</p>
+        {% endfor %}
+
+        <footer>
+            <br>
+            <hr>
+            <p>Myles Stubbs</p>
+        </footer>
+    </body>
+</html>

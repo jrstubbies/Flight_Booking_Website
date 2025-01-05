@@ -1,0 +1,38 @@
+
+/* Filter region styles */
+#filter {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+#filter label {
+    margin-right: 10px;
+}
+
+#filter select, #filter input[type="date"], #filter button {
+    margin-right: 20px;
+}
+
+#start_date,
+#end_date,
+ #origin_dropdown,
+ #dest_dropdown {
+    width: 150px;
+    height: 30px;
+}
+
+
+
+/* table row styles, change the colour when hover over, and when clicked */
+.selected-row {
+    background-color: #333;
+    color: #fff;
+}
+
+.clickable-row:hover {
+    cursor: pointer;
+    background-color: #aaa
+}
+
+

@@ -1,0 +1,61 @@
+<!doctype html>
+{% load static %}
+
+<!-- SIMPLE SIGNUP/REGISTER PAGE -->
+<html>
+    <head>
+        <title>Register User</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'navbar.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'tables.css' %}">
+    </head>
+
+    <body>
+        {% include 'navbar.html' %}
+        <form method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+
+            <p>Enter your details below</p>
+            <table>
+                <tr>
+                    <td>First Name: </td>
+                    <td><input type="text" name="fname" required></td>
+                </tr>
+                <tr>
+                    <td>Last Name: </td>
+                    <td><input type="text" name="lname" required></td>
+                </tr>
+                <tr>
+                    <td>Email: </td>
+                    <td><input type="text" name="email" required></td>
+                </tr>
+                <tr>
+                    <td>Phone: </td>
+                    <td><input type="text" name="phone" required></td>
+                </tr>
+                <tr>
+                    <td>Username: </td>
+                    <td><input type="text" name="username" required></td>
+                </tr>
+                <tr>
+                    <td>Password: </td>
+                    <td><input type="text" name="password" required></td>
+                </tr>
+            </table>
+
+            <!-- If any user creation errors, display error messages here -->
+            {% if error_message %}
+                <p>{{ error_message }}</p>
+            {% endif %}
+
+            <p><input type="submit" id="signupButton" name="submit" value="submit"></p>
+        </form>
+
+        <footer>
+            <br>
+            <hr>
+            <p>Myles Stubbs</p>
+        </footer>
+    </body>
+
+
+</html>

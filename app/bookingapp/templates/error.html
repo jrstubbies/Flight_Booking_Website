@@ -1,0 +1,19 @@
+<!doctype html>
+{% load static %}
+
+<!-- SIMPLE ERROR PAGE TO DISPLAY AN ERROR IF SOMETHING GOES WRONG -->
+<html>
+    <head>
+        <title> Error</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'navbar.css' %}">
+    </head>
+
+    <body>
+        {% include 'navbar.html' %}
+        <p> 404:    {{ msg }}</p>
+    </body>
+    <footer>
+        <hr>
+        <p>Myles Stubbs</p>
+    </footer>
+</html>
